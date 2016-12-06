@@ -1,0 +1,12 @@
+.minefield td {
+  color: darkgreen;
+  border: 1pt solid darkblue;
+  padding: 0;
+  /*width: 30pt;
+  height: 30pt;
+  text-align: center;*/
+}
+.minefield {
+  line-height: 0;
+  border-spacing: 0;
+}

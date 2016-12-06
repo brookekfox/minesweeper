@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+    <!-- <script src="mine.js"></script> -->
+    <script>
+      function MinesweeperController($scope) {
+        function createMinefield() {
+          var minefield = {};
+          minefield.rows = [];
+
+          for(var i=0; i<9; i++) {
+            var row = {};
+            row.spots = [];
+            for(var j = 0; j < 9; j++) {
+              var spot = {};
+              spot.isCovered = true;
+              spot.content = "empty";
+              row.spots.push(spot);
+            }
+            minefield.rows.push(row);
+          }
+          return minefield;
+        }
+
+        function getSpot(minefield, row, column) {
+          return minefield.rows[row].spots[column];
+        }
+
+        function placeMine(minefield) {
+          var row = Math.round(Math.random() * 8);
+          var column = Math.round(Math.random() * 8);
+          var spot = getSpot(minefield, row, column);
+          spot.content = "mine";
+        }
+
+        function addMines(minefield) {
+          for(var i=0; i<10; i++) {
+            placeMine(minefield);
+          }
+        }
+
+        function calculateNumber(minefield, row, column) {
+          var thisSpot = getSpot(minefield, row, column);
+          console.log(thisSpot);
+          if(thisSpot.content == "mine") {
+            return;
+          }
+          var mineCount = 0;
+          if (row > 0) {
+            if(column > 0) {
+              var spot = getSpot(minefield, row-1, column-1);
+              if(spot.content == "mine") {
+                mineCount++;
+              }
+            }
+          }
+        }
+
+        $scope.minefield = createMinefield();
+        addMines($scope.minefield);
+      };
+    </script>
+  </head>
+  <body ng-controller="MinesweeperController">
+    <table class="minefield" border="1">
+      <tr ng-repeat="row in minefield.rows">
+          <td class="spot" ng-repeat="spot in row.spots" ng-click="spot.isCovered = false">
+              <!-- {{spot.isCovered}} -->
+              <img ng-if="spot.isCovered" src="icons/covered.png">
+              <img ng-if="!spot.isCovered && spot.content == 'empty'" src="icons/empty.png">
+              <img ng-if="!spot.isCovered && spot.content == 'mine'" src="icons/mine.png">
+          </td>
+      </tr>
+    </table>
+  </body>
+</html>
